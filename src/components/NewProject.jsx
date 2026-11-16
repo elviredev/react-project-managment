@@ -1,6 +1,8 @@
 import Input from "./Input"
 
 export default function NewProject() {
+
+
   return (
     <div className="w-140 mt-16">
       <menu className="flex items-center justify-end gap-4 my-4">
@@ -10,7 +12,7 @@ export default function NewProject() {
           </button>
         </li>
         <li>
-          <button className="px-6 py-2 rounded-md bg-rose-800 text-rose-50 hover:bg-rose-900 cursor-pointer">
+          <button className="px-4 py-2 rounded-md bg-rose-800 text-rose-50 hover:bg-rose-900 cursor-pointer">
             Enregistrer
           </button>
         </li>

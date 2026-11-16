@@ -32,8 +32,8 @@ export default {
         messageId: "wrap",
         fix(fixer) {
           return [
-            fixer.insertTextBefore(node, "("),
-            fixer.insertTextAfter(node, ")"),
+            fixer.insertTextBefore(node, "(\n"),
+            fixer.insertTextAfter(node, "\n)"),
           ]
         },
       })
@@ -53,6 +53,12 @@ export default {
       VariableDeclarator(node) {
         if (isJsx(node.init)) {
           checkJsx(node.init)
+        }
+      },
+
+      ReturnStatement(node) {
+        if (isJsx(node.argument)) {
+          checkJsx(node.argument)
         }
       },
     }
