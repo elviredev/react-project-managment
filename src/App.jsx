@@ -10,7 +10,8 @@ function App() {
     projects: [],
   })
 
-  function handleAddProject() {
+  // On commence le processus d'ajout d'un projet
+  function handleStartAddProject() {
     setProjectsState((prevState) => {
       return {
         ...prevState,
@@ -19,17 +20,36 @@ function App() {
     })
   }
 
+  // On termine le processus d'ajout
+  // Cette fonction est invoquée dans le composant NewProject
+  function handleAddProject(projectData) {
+    setProjectsState((prevState) => {
+      // stocker le nouveau projet avec ses elts title, description, dueDate et un id généré aléatoirement
+      const newProject = {
+        ...projectData,
+        id: Math.random(),
+      }
+
+      return {
+        ...prevState,
+        projects: [...prevState.projects, newProject], // on garde les anciens projets et on ajoute le nouveau projet
+      }
+    })
+  }
+
+  console.log(projectsState)
+
   let content
 
   if (projectsState.selectedProjectId === null) {
-    content = <NewProject />
+    content = <NewProject onAdd={handleAddProject} />
   } else if (projectsState.selectedProjectId === undefined) {
-    content = <NoProjectSelected onAddProject={handleAddProject} />
+    content = <NoProjectSelected onAddProject={handleStartAddProject} />
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onAddProject={handleAddProject} />
+      <ProjectsSidebar onAddProject={handleStartAddProject} />
       {content}
     </main>
   )
