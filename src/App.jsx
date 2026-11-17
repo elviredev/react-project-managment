@@ -24,20 +24,20 @@ function App() {
   // Cette fonction est invoquée dans le composant NewProject
   function handleAddProject(projectData) {
     setProjectsState((prevState) => {
+      const projectId = Math.random()
       // stocker le nouveau projet avec ses elts title, description, dueDate et un id généré aléatoirement
       const newProject = {
         ...projectData,
-        id: Math.random(),
+        id: projectId,
       }
 
       return {
         ...prevState,
+        selectedProjectId: undefined, // revenir à l'écran d'accueil
         projects: [...prevState.projects, newProject], // on garde les anciens projets et on ajoute le nouveau projet
       }
     })
   }
-
-  console.log(projectsState)
 
   let content
 
@@ -49,7 +49,10 @@ function App() {
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onAddProject={handleStartAddProject} />
+      <ProjectsSidebar
+        onAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+      />
       {content}
     </main>
   )
