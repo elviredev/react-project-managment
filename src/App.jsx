@@ -1,7 +1,8 @@
 import { useState } from "react"
-import NewProject from "./components/NewProject"
-import ProjectsSidebar from "./components/ProjectsSidebar"
+import NewProject from "./components/NewProject.jsx"
+import ProjectsSidebar from "./components/ProjectsSidebar.jsx"
 import NoProjectSelected from "./components/NoProjectSelected.jsx"
+import SelectedProject from "./components/SelectedProject.jsx"
 
 function App() {
   // state permettant de gérer l'affichage d'un composant ou d'un autre
@@ -39,10 +40,47 @@ function App() {
     })
   }
 
-  let content
+  // Annuler la saisie d'un nouveau projet sur NewProject et revenir à la page d'accueil
+  function handleCancelAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined, // page d'accueil
+      }
+    })
+  }
+
+  // Sélectionner un projet dans la sidebar
+  function handleSelectProject(id) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: id, // projet sélectionné
+      }
+    })
+  }
+
+  // Supprimer un projet sélectionné
+  function handleDeleteProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        projects: prevState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId,
+        ),
+        selectedProjectId: undefined,
+      }
+    })
+  }
+
+  const selectedProject = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProjectId,
+  )
+
+  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
 
   if (projectsState.selectedProjectId === null) {
-    content = <NewProject onAdd={handleAddProject} />
+    content = <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onAddProject={handleStartAddProject} />
   }
@@ -52,6 +90,7 @@ function App() {
       <ProjectsSidebar
         onAddProject={handleStartAddProject}
         projects={projectsState.projects}
+        onSelectProject={handleSelectProject}
       />
       {content}
     </main>
